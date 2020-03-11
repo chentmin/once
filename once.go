@@ -46,7 +46,6 @@ func (m *manager) Ensure(req events.APIGatewayProxyRequest) error {
 	putInput := &s3.PutObjectInput{
 		Bucket: aws.String(m.s3Bucket),
 		Key: aws.String(path.Join(m.s3Prefix, requestId)),
-		ObjectLockMode: aws.String(s3.ObjectLockModeGovernance),
 		ObjectLockLegalHoldStatus:aws.String(s3.ObjectLockLegalHoldStatusOn),
 	}
 
