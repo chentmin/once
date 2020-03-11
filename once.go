@@ -51,8 +51,7 @@ func (m *manager) Ensure(req events.APIGatewayProxyRequest) error {
 
 	s3Service := s3.New(session.Must(session.NewSession()))
 
-	result, err := s3Service.PutObject(putInput)
+	_, err := s3Service.PutObject(putInput)
 
-	fmt.Printf("once.put result: %+v, error: %+v\n", result, err)
 	return err
 }
