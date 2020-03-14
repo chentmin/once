@@ -1,22 +1,22 @@
 package once
 
 import (
+	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
-	"path"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
 )
 
 type manager struct {
-	s3Bucket string
-	s3Prefix string
+	dynamoTableName string
 
 	// TODO auth
 }
 
-func New(bucket string, ops ...option) *manager {
+func New(dynamoTableName string, ops ...option) *manager {
 	result := &manager{
-		s3Bucket: bucket,
+		dynamoTableName: dynamoTableName,
 	}
 
 	for _, o := range ops {
@@ -26,27 +26,37 @@ func New(bucket string, ops ...option) *manager {
 	return result
 }
 
-func Prefix(p string) option {
-	return func(manager *manager) {
-		manager.s3Prefix = p
-	}
-}
-
 type option func(m *manager)
 
 func (m *manager) Ensure(id string) {
+	svc := dynamodb.New(session.Must(session.NewSession()))
 
-	putInput := &s3.PutObjectInput{
-		Bucket: aws.String(m.s3Bucket),
-		Key: aws.String(path.Join(m.s3Prefix, id)),
-		ObjectLockLegalHoldStatus:aws.String(s3.ObjectLockLegalHoldStatusOn),
+	input := &dynamodb.PutItemInput{
+		Item: map[string]*dynamodb.AttributeValue{
+			"id": {
+				S: aws.String(id),
+			},
+		},
+		TableName:              aws.String(m.dynamoTableName),
+		ConditionExpression: aws.String("attribute_not_exists(id)"),
 	}
 
-	s3Service := s3.New(session.Must(session.NewSession()))
+	_, err := svc.PutItem(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case dynamodb.ErrCodeConditionalCheckFailedException:
+			default:
+				fmt.Printf("once发生了没有处理的aws错误: %s", aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Printf("once发生了不知道啥错误: %s", err)
+		}
 
-	_, err := s3Service.PutObject(putInput)
-
-	if err != nil{
 		panic(err)
 	}
+
+	return
 }

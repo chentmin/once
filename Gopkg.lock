@@ -2,7 +2,7 @@
 
 
 [[projects]]
-  digest = "1:2a2c6acaa16d9d1e73f0c15cb85c02884bb5e5f0252e0646003e1f1d6680ffff"
+  digest = "1:a1a95e825af2eb91b0e0b3aceac5378275596c617eac9625e1cbc00fed673d10"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -17,6 +17,7 @@
     "aws/credentials/endpointcreds",
     "aws/credentials/processcreds",
     "aws/credentials/stscreds",
+    "aws/crr",
     "aws/csm",
     "aws/defaults",
     "aws/ec2metadata",
@@ -38,11 +39,13 @@
     "private/protocol/eventstream",
     "private/protocol/eventstream/eventstreamapi",
     "private/protocol/json/jsonutil",
+    "private/protocol/jsonrpc",
     "private/protocol/query",
     "private/protocol/query/queryutil",
     "private/protocol/rest",
     "private/protocol/restxml",
     "private/protocol/xml/xmlutil",
+    "service/dynamodb",
     "service/s3",
     "service/s3/internal/arn",
     "service/sts",
@@ -59,13 +62,24 @@
   pruneopts = "UT"
   revision = "c2b33e84"
 
+[[projects]]
+  digest = "1:9e1d37b58d17113ec3cb5608ac0382313c5b59470b94ed97d0976e69c7022314"
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "614d223910a179a466c1767a985424175c39b465"
+  version = "v0.9.1"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
     "github.com/aws/aws-sdk-go/aws",
+    "github.com/aws/aws-sdk-go/aws/awserr",
     "github.com/aws/aws-sdk-go/aws/session",
+    "github.com/aws/aws-sdk-go/service/dynamodb",
     "github.com/aws/aws-sdk-go/service/s3",
+    "github.com/pkg/errors",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
