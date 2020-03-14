@@ -2,11 +2,10 @@
 
 
 [[projects]]
-  digest = "1:a1a95e825af2eb91b0e0b3aceac5378275596c617eac9625e1cbc00fed673d10"
+  digest = "1:9341f2a80f3b5d9956681295aa464933bfea54a7f3020b992bf53f8ec72cd718"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
-    "aws/arn",
     "aws/awserr",
     "aws/awsutil",
     "aws/client",
@@ -27,7 +26,6 @@
     "aws/signer/v4",
     "internal/context",
     "internal/ini",
-    "internal/s3err",
     "internal/sdkio",
     "internal/sdkmath",
     "internal/sdkrand",
@@ -36,18 +34,13 @@
     "internal/strings",
     "internal/sync/singleflight",
     "private/protocol",
-    "private/protocol/eventstream",
-    "private/protocol/eventstream/eventstreamapi",
     "private/protocol/json/jsonutil",
     "private/protocol/jsonrpc",
     "private/protocol/query",
     "private/protocol/query/queryutil",
     "private/protocol/rest",
-    "private/protocol/restxml",
     "private/protocol/xml/xmlutil",
     "service/dynamodb",
-    "service/s3",
-    "service/s3/internal/arn",
     "service/sts",
     "service/sts/stsiface",
   ]
@@ -78,7 +71,6 @@
     "github.com/aws/aws-sdk-go/aws/awserr",
     "github.com/aws/aws-sdk-go/aws/session",
     "github.com/aws/aws-sdk-go/service/dynamodb",
-    "github.com/aws/aws-sdk-go/service/s3",
     "github.com/pkg/errors",
   ]
   solver-name = "gps-cdcl"
