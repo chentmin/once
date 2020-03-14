@@ -1,8 +1,6 @@
 package once
 
 import (
-	"fmt"
-	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -36,16 +34,11 @@ func Prefix(p string) option {
 
 type option func(m *manager)
 
-func (m *manager) Ensure(req events.APIGatewayProxyRequest) error {
-	requestId := req.RequestContext.RequestID
-
-	if requestId == ""{
-		return fmt.Errorf("api gateway request id not exist")
-	}
+func (m *manager) Ensure(id string) {
 
 	putInput := &s3.PutObjectInput{
 		Bucket: aws.String(m.s3Bucket),
-		Key: aws.String(path.Join(m.s3Prefix, requestId)),
+		Key: aws.String(path.Join(m.s3Prefix, id)),
 		ObjectLockLegalHoldStatus:aws.String(s3.ObjectLockLegalHoldStatusOn),
 	}
 
@@ -53,5 +46,7 @@ func (m *manager) Ensure(req events.APIGatewayProxyRequest) error {
 
 	_, err := s3Service.PutObject(putInput)
 
-	return err
+	if err != nil{
+		panic(err)
+	}
 }
